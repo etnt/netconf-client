@@ -13,7 +13,8 @@ pub fn session_loop(
     let user = args.user;
     let passwd = args.passwd;
 
-    let ssh: SSHTransport = SSHTransport::connect(&addr, &user, &passwd).unwrap();
+    let ssh: SSHTransport =
+        SSHTransport::connect(&addr, &user, &passwd).unwrap();
     let mut conn: Connection = Connection::new(ssh).unwrap();
     let _ = conn.send_hello();
     debug!("hello, got reply");

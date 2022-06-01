@@ -1,12 +1,18 @@
+use crate::args::Args;
 use crate::CHUNK_SIZE;
 use crossbeam::channel::Sender;
 use std::fs::File;
 use std::io::{self, BufReader, Read, Result};
 
-pub fn read_loop(infile: &str, session_tx: Sender<Vec<u8>>) -> Result<()> {
+pub fn read_loop(args: Args, session_tx: Sender<Vec<u8>>) -> Result<()> {
+    if args.get_config {
+        return Ok(());
+    };
+
     // Box is a Smart Pointer with a fixed size which places
     // its value on the heap. In this case, the value is anything
     // that satisfies the Read Trait.
+    let infile = &args.infile;
     let mut reader: Box<dyn Read> = if !infile.is_empty() {
         Box::new(BufReader::new(File::open(infile)?))
     } else {

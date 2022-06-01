@@ -16,7 +16,11 @@ pub struct SSHTransport {
 }
 
 impl SSHTransport {
-    pub fn connect(addr: &str, user_name: &str, password: &str) -> io::Result<SSHTransport> {
+    pub fn connect(
+        addr: &str,
+        user_name: &str,
+        password: &str,
+    ) -> io::Result<SSHTransport> {
         let tcp = TcpStream::connect(addr)?;
         let mut sess = Session::new()?;
         sess.set_tcp_stream(tcp);
