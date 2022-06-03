@@ -20,6 +20,9 @@ pub fn write_loop(args: Args, write_rx: Receiver<Vec<u8>>) -> Result<()> {
             break;
         }
 
+        // FIXME not working atm.
+        // See: https://users.rust-lang.org/t/pretty-printing-xml/76372/6
+        //
         let mut xml = format_xml(&buffer).unwrap_or_default().as_bytes();
 
         if let Err(e) = writer.write_all(&xml) {
