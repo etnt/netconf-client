@@ -13,6 +13,7 @@ pub struct Args {
     pub passwd: String,
     pub log_level: LevelFilter,
     pub get_config: bool,
+    pub pretty_print: bool,
 }
 
 impl Args {
@@ -31,6 +32,11 @@ impl Args {
                     .short('s')
                     .long("silent")
                     .help("Produce no output."),
+            )
+            .arg(
+                Arg::new("pretty-print")
+                    .long("pretty-print")
+                    .help("Pretty-print the output."),
             )
             .arg(
                 Arg::new("host")
@@ -89,6 +95,7 @@ impl Args {
             LevelFilter::Off
         };
         let get_config = matches.is_present("get-config");
+        let pretty_print = matches.is_present("pretty-print");
         Self {
             infile,
             outfile,
@@ -99,6 +106,7 @@ impl Args {
             passwd,
             log_level,
             get_config,
+            pretty_print,
         }
     }
 }
