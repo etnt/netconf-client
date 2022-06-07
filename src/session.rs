@@ -31,6 +31,21 @@ pub fn session_loop(
         debug!("close-session, Reply: {}", close_session_reply);
 
         return Ok(());
+    } else if args.create_subscription {
+        // FIXME should probably run in a separate thread either
+        //       writing output to stdout or a file; also the
+        //       stream should be configurable, not just 'NETCONF'
+        //       This way we could handle input request as well as
+        //       the output from the subscription.
+        let create_subscription_reply = conn.create_subscription().unwrap();
+        debug!("create-subscription, Reply: {}", create_subscription_reply);
+        let _ = write_tx.send(create_subscription_reply.as_bytes().to_vec());
+        loop{
+            let resp = conn.transport.read()?;
+            debug!("create-subscription, Reply: {}", resp);
+            let _ = write_tx.send(resp.as_bytes().to_vec());
+        }
     }
+
     Ok(())
 }

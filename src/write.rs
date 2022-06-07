@@ -5,6 +5,7 @@ use crossbeam::channel::Receiver;
 use std::fs::File;
 use std::io::{self, BufWriter, ErrorKind, Result, Write};
 use xml::{reader::ParserConfig, writer::EmitterConfig};
+use log::debug;
 
 pub fn write_loop(args: Args, write_rx: Receiver<Vec<u8>>) -> Result<()> {
     let outfile = &args.outfile;
@@ -22,17 +23,20 @@ pub fn write_loop(args: Args, write_rx: Receiver<Vec<u8>>) -> Result<()> {
 
         if args.pretty_print {
             // See: https://users.rust-lang.org/t/pretty-printing-xml/76372/6
-            if let Err(error) = to_writer_pretty(&mut writer, &buffer) {
+            if let Err(_error) = to_writer_pretty(&mut writer, &buffer) {
                 return Ok(());
             }
         } else {
             if let Err(e) = writer.write_all(&buffer) {
-                if e.kind() == ErrorKind::BrokenPipe {
+                            if e.kind() == ErrorKind::BrokenPipe {
                     // "stop the program cleanly"
                     return Ok(());
                 }
                 return Err(e);
             }
+            // FIXME is flush the best solution here?
+            let _ = writer.write(format!("\n").as_bytes());
+            let _ = writer.flush();
         }
     }
 

@@ -14,6 +14,7 @@ pub struct Args {
     pub log_level: LevelFilter,
     pub get_config: bool,
     pub pretty_print: bool,
+    pub create_subscription: bool,
 }
 
 impl Args {
@@ -67,6 +68,12 @@ impl Args {
                     .help("user password"),
             )
             .arg(
+                Arg::new("create-subscription")
+                    .short('e')
+                    .long("create-subscription")
+                    .help("establish a subscription on the NETCONF stream."),
+            )
+            .arg(
                 Arg::new("get-config")
                     .long("get-config")
                     .help("Get all config in the running datastore."),
@@ -94,6 +101,7 @@ impl Args {
         } else {
             LevelFilter::Off
         };
+        let create_subscription = matches.is_present("create-subscription");
         let get_config = matches.is_present("get-config");
         let pretty_print = matches.is_present("pretty-print");
         Self {
@@ -107,6 +115,7 @@ impl Args {
             log_level,
             get_config,
             pretty_print,
+            create_subscription,
         }
     }
 }

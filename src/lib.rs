@@ -35,6 +35,14 @@ const CLOSE_SESSION: &str = r#"
    <close-session/>
 </rpc>"#;
 
+const CREATE_SUBSCRIPTION: &str = r#"
+<?xml version="1.0" encoding="UTF-8"?>
+<rpc xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="1">
+  <create-subscription xmlns="urn:ietf:params:xml:ns:netconf:notification:1.0">
+    <stream>NETCONF</stream>
+  </create-subscription>
+</rpc>"#;
+
 ///
 /// The 'transport/ssh' code is taken from netconf-rs.
 ///
@@ -59,6 +67,12 @@ impl Connection {
 
     pub fn get_config(&mut self) -> io::Result<String> {
         self.transport.write(GET_CONFIG)?;
+        let resp = self.transport.read()?;
+        Ok(resp)
+    }
+
+    pub fn create_subscription(&mut self) -> io::Result<String> {
+        self.transport.write(CREATE_SUBSCRIPTION)?;
         let resp = self.transport.read()?;
         Ok(resp)
     }
