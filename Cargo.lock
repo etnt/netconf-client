@@ -400,6 +400,7 @@ dependencies = [
  "crossbeam",
  "crossterm",
  "env_logger",
+ "lock_api 0.4.7",
  "log",
  "memchr",
  "memmem",
