@@ -6,6 +6,7 @@ Example on how to run what little that works right now:
 
     cargo run -- --get-config
     cargo run -- --get-config --pretty-print
+    cargo run -- --create-subscription
 
 ## Credits
 
